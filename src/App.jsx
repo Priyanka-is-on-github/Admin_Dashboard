@@ -35,22 +35,22 @@ function App() {
   }
 
   
-    let flag = false;
+  
     const Edit =(indexnum)=>{
     
         let row = document.getElementById(indexnum); 
-        if( flag == false) 
+       if( row.querySelector('#name').hasAttribute("readOnly")) 
         {
           row.querySelector('#name').removeAttribute("readOnly"); 
           row.querySelector('#email').removeAttribute("readOnly"); 
           row.querySelector('#role').removeAttribute("readOnly"); 
-          flag =  true; 
+           
         }
         else{
           row.querySelector('#name').setAttribute("readOnly" , true); 
-          row.querySelector('#email').setAttribute("readOnly", true);
+          row.querySelector('#email').setAttribute("readOnly", true); 
           row.querySelector('#role').setAttribute("readOnly" , true); 
-          flag = false;
+         
         }
           
           console.log(row.querySelector('#name')); 
@@ -109,7 +109,7 @@ function App() {
               //   </td>
               // </tr>
 
-              <EditData name = {currele.name} email = {currele.email} role = {currele.role} id = {index}key = {index} editfun ={Edit} /> 
+              <EditData name = {currele.name} email = {currele.email} role = {currele.role} id = {index} key = {index} editfun ={Edit} /> 
             );
           })}
         </tbody>
