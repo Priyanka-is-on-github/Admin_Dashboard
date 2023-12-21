@@ -1,24 +1,35 @@
 import React, { useState, useContext, createContext } from "react";
 import App from "./App";
-import { DetailsContext } from "./App";
+import { DetailsContext , FilterContext } from "./App";
 
 const EditData = (props) => {
   const userdetail = useContext(DetailsContext);
   const { details, setDetails } = userdetail;
 
-  const [editsave, setEditsave] = useState("✏️");
+  const filterobj = useContext(FilterContext)
+  const {filtername , setFiltername} = filterobj;
+
+  const [editsave, setEditsave] = useState("✏️"); 
+
+
 
   const [name, setName] = useState(props.name);
   const [email, setEmail] = useState(props.email);
   const [role, setRole] = useState(props.role);
 
   const Delete = (indexnum) => {
-    let newdata = details.filter((currele) => {
-      return currele.id != indexnum;
+    let newdata =details.filter((currele) => {  
+      return currele.id != indexnum; 
     });
+    
+    let newfilterdata = filtername.filter((currele)=>{ 
+      return currele.id != indexnum; 
+    })
+    setFiltername(newfilterdata); 
+    setDetails(newdata); 
+    };
 
-    setDetails(newdata);
-  };
+    
 
   const Edit = (indexnum) => {
     let row = document.getElementById(indexnum);

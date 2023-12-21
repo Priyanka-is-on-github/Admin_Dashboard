@@ -2,10 +2,12 @@ import React, { useEffect, useState, createContext } from "react";
 import EditData from "./EditData";
 import "./App.css";
 
-const DetailsContext = createContext();
+const DetailsContext = createContext(); 
+const FilterContext = createContext();
 
 function App() {
   const [details, setDetails] = useState([]);
+  const [filtername , setFiltername] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -16,11 +18,12 @@ function App() {
       let datas = await data.json();
 
       setDetails(datas);
+      setFiltername(datas);
     })();
   }, []);
-
+ 
   let selarr = [];
-
+  
   const SelData = (idnum, event) => {
     let row = document.getElementById(idnum);
 
@@ -34,20 +37,51 @@ function App() {
       });
     }
   };
-
+ 
+  
   function MulDel() {
-    let newarr = details.filter((currele) => {
-      return !selarr.includes(currele.id);
+    let newfilterdata = filtername.filter((currele) => {
+      return !selarr.includes(currele.id);  
     });
 
+    let  newarr= details.filter((currele)=>{
+      return !selarr.includes(currele.id); 
+    })
+
+    setFiltername(newfilterdata);
     setDetails(newarr);
+  }
+
+  function FilterProp(value){ 
+
+    if(value.length === 0){
+      setFiltername(details)
+    }
+
+     let filtered = details.filter((currele)=>{  
+      
+      if(currele.name.toString().toLowerCase().includes(value))  
+        {   
+          return true
+        }
+        else {
+          return false
+        }
+    
+      
+    })
+
+    setFiltername(filtered); 
+  
+
   }
 
   return (
     <>
       <DetailsContext.Provider value={{ details, setDetails }}>
+      <FilterContext.Provider value={{ filtername, setFiltername }}>
         <div>
-          <input type="text" placeholder="Search..." />
+          <input type="text" placeholder="Search..."  onChange = {(event)=>{ FilterProp(event.target.value)}}/>
           <button
             onClick={() => {
               MulDel();
@@ -70,7 +104,7 @@ function App() {
           </thead>
 
           <tbody>
-            {details.map((currele, index) => {
+            {filtername.map((currele, index) => {
               return (
                 <EditData
                   name={currele.name}
@@ -84,10 +118,11 @@ function App() {
             })}
           </tbody>
         </table>
+        </FilterContext.Provider>
       </DetailsContext.Provider>
     </>
   );
 }
 
 export default App;
-export { DetailsContext };
+export { DetailsContext , FilterContext};
